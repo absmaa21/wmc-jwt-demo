@@ -1,0 +1,81 @@
+#POST http://localhost:4000/api/auth/register
+### Register TUser: bob ist noch nicht angelegt
+# @name register bob
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "bob123"
+}
+
+###
+
+### Login
+#POST http://localhost:4000/api/auth/login
+# @name login bob
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "bob123"
+}
+
+> {%
+    client.global.set("access_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+###
+
+### Login als Admin (schon hardcoded registriert)
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+> {%
+    client.global.set("access_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+### Login für hardcoded TUser: username: 'alice', password: 'alice123'
+
+##############################
+
+### Get current user (/me) with Access-Token im Header
+# @name GET /ME
+#GET http://localhost:4000/api/auth/me
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{access_token}}
+
+###
+
+### Admin Route (nur ADMIN)
+#GET http://localhost:4000/api/auth/admin
+# @name Nur für TUser mit Rolle: Admin
+GET {{baseUrl}}/auth/admin
+Authorization: Bearer {{access_token}}
+
+###
+
+### Refresh Token (aus Cookie oder Body)
+#POST http://localhost:4000/api/auth/refresh
+# @name refresh
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh_token}}"
+}
+
+###
+
+### Logout
+#POST http://localhost:4000/api/auth/logout
+# @name logout
+POST {{baseUrl}}/auth/logout
