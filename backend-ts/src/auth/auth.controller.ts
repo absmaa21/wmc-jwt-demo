@@ -45,7 +45,7 @@ export async function login (req: Request, res: Response): Promise<void> {
     return
   }
 
-  const accessToken = signAccessToken({sub: String(user.id), username, roles: user.roles, iat: Date.now()})
+  const accessToken = signAccessToken({sub: String(user.id), username, roles: user.roles})
   const refreshToken = signRefreshToken({sub: String(user.id)})
   refreshStore.set(refreshToken, {userId: user.id})
   setAuthCookies(res, {accessToken, refreshToken})
