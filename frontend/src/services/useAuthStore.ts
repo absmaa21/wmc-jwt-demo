@@ -1,8 +1,5 @@
 import { create } from "zustand";
 import { ISafeUser } from "../models/auth.interfaces";
-import axios from "axios";
-import { AxiosResponse } from "axios";
-import {API_URL} from "../config";
 import {api} from "./api.service";
 
 // Zustand Store Interface
@@ -36,7 +33,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({user: response.data.user})
       return ""
     } catch (e: any) {
-      const errMsg = e.message ?? JSON.stringify(e)
+      const errMsg = e.response.data.message ?? JSON.stringify(e)
       console.log(`Error while login: ${errMsg}`)
       return errMsg
     }
@@ -47,7 +44,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await api.post<AuthResponse>('/auth/register', {username, password})
       return ""
     } catch (e: any) {
-      const errMsg = e.message ?? JSON.stringify(e)
+      const errMsg = e.response.data.message ?? JSON.stringify(e)
       console.log(`Error while register: ${errMsg}`)
       return errMsg
     }
