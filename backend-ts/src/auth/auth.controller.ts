@@ -73,7 +73,7 @@ export async function refresh (req: Request, res: Response): Promise<void> {
     return
   }
 
-  const accessToken = signAccessToken({sub: String(user.id), username: user.username, roles: user.roles, iat: Date.now()})
+  const accessToken = signAccessToken({sub: String(user.id), username: user.username, roles: user.roles})
   setAuthCookies(res, {accessToken, refreshToken})
   res.status(200).json({user})
 }
